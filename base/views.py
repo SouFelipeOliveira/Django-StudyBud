@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic, Message
-from .forms import RoomForm
+from .forms import RoomForm, UserForm
 
 # Create your views here.T
 
@@ -46,6 +46,9 @@ def logoutUser(request):
 def registerUser(request):
     form = UserCreationForm()
 
+    if request.user.is_authenticated:
+        return redirect("home")
+
     if request.method == "POST":
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -60,7 +63,9 @@ def registerUser(request):
         else:
             messages.error(request, "An error ocurred during registration. :(")
 
-    return render(request, "base/signup.html", {"form": form})
+    context = {"form": form}
+
+    return render(request, "base/signup.html", context)
 
 
 def home(request):
@@ -131,15 +136,10 @@ def createRoom(request):
             host=request.user,
             topic=topic,
             name=request.POST.get("name"),
-            description=request.POST.get("description")
+            description=request.POST.get("description"),
         )
         return redirect("home")
-        # form = RoomForm(request.POST)
-        # if form.is_valid():
-        #     room = form.save(commit=False)
-        #     room.host = request.user
-        #     form.save()
-        #     return redirect("home")
+        
     context = {"form": form, "topics": topic}
     return render(request, "base/room_form.html", context)
 
@@ -195,3 +195,23 @@ def deleteMessage(request, pk):
 
     context = {"obj": message}
     return render(request, "base/delete.html", context)
+
+
+@login_required(login_url="/login")
+def updateUser(request, pk):
+
+    user = User.objects.get(id=pk)
+    form = UserForm(instance=user)
+
+    if request.user != user:
+        return HttpResponse("Your are not allowed here!")
+
+    if request.method == "POST":
+        form = UserForm(request.POST, instance=user)
+
+        if form.is_valid():
+            form.save()
+            return redirect("user-profile", pk=user.id)
+
+    context = {"user": user, "form": form}
+    return render(request, "base/update-user.html", context)
