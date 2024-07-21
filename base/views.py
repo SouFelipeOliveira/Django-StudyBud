@@ -80,7 +80,7 @@ def home(request):
         Q(topic__name__icontains=q) | Q(name__contains=q) | Q(description__contains=q)
     )
 
-    topics = Topic.objects.all()
+    topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
     room_messages = Message.objects.filter(Q(room__topic__name__icontains=q))
 
@@ -224,7 +224,6 @@ def updateUser(request, pk):
     elif request.user != user:
         return permissionDeniedView(request)
         
-
     context = {"form": form}
     return render(request, "base/update-user.html", context)
 
@@ -235,3 +234,9 @@ def topicsPage(request):
     context = {"topics": topics}
     return render(request, "base/topics.html", context)
 
+
+def activityPage(request):
+    room_messages = Message.objects.all()
+
+    context = {"room_messages": room_messages}
+    return render(request, "base/activity.html", context)
