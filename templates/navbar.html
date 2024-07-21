@@ -21,7 +21,7 @@
 
             {% if request.user.is_authenticated %}
             <div class="header__user">
-                <a href="profile.html">
+                <a href="{% url 'user-profile' user.id %}">
                     <div class="avatar avatar--medium active">
                         <img src="https://randomuser.me/api/portraits/men/37.jpg" />
                     </div>
@@ -69,17 +69,5 @@
         </nav>
     </div>
 </header>
-
-
-
-
-
-
-<p>Hello {{request.user}} </p>
-{% if request.user.is_authenticated %}
-<a href="{% url 'logout' %}">Logout</a>
-{% else %}
-<a href="{% url 'login' %}">Login</a>
-{% endif %}
 
 <hr>
