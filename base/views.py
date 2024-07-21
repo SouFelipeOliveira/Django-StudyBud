@@ -8,8 +8,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from .models import Room, Topic, Message
 from .forms import RoomForm, UserForm
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.T
+
+
+def permissionDeniedView(request):
+    raise PermissionDenied
 
 
 def loginPage(request):
@@ -61,7 +66,7 @@ def registerUser(request):
             except Exception as e:
                 print(f"Registration failed. Error: {e}")
         else:
-            messages.error(request, "An error ocurred during registration. :(")
+            messages.error(request, "The form is invalid")
 
     context = {"form": form}
 
@@ -132,14 +137,14 @@ def createRoom(request):
         topic_name = request.POST.get("topic")
         topic, created = Topic.objects.get_or_create(name=topic_name)
 
-        Room.objects.create(
+        room = Room.objects.create(
             host=request.user,
             topic=topic,
             name=request.POST.get("name"),
             description=request.POST.get("description"),
         )
-        return redirect("home")
-        
+        return redirect("room", pk=room.id)
+
     context = {"form": form, "topics": topic}
     return render(request, "base/room_form.html", context)
 
@@ -161,7 +166,7 @@ def updateRoom(request, pk):
         room.name = request.POST.get("name")
         room.description = request.POST.get("description")
         room.save()
-        return redirect("home")
+        return redirect("room", pk=room.id)
 
     context = {"form": form, "topics": topics, "room": room}
     return render(request, "base/room_form.html", context)
@@ -191,7 +196,7 @@ def deleteMessage(request, pk):
 
     if request.method == "POST":
         message.delete()
-        return redirect("home")
+        return redirect("room", pk=message.room.id)
 
     context = {"obj": message}
     return render(request, "base/delete.html", context)
@@ -203,15 +208,22 @@ def updateUser(request, pk):
     user = User.objects.get(id=pk)
     form = UserForm(instance=user)
 
-    if request.user != user:
-        return HttpResponse("Your are not allowed here!")
+    if request.user == user:
 
-    if request.method == "POST":
-        form = UserForm(request.POST, instance=user)
+        if request.method == "POST":
+            form = UserForm(request.POST, instance=user)
+            if form.is_valid():
+                try:
+                    form.save()
+                    return redirect("user-profile", pk=user.id)
+                except Exception as e:
+                    return Exception(f"Registration failed. Error: {e}")
+            else:
+                messages.error(request, "The form is invalid")
 
-        if form.is_valid():
-            form.save()
-            return redirect("user-profile", pk=user.id)
+    elif request.user != user:
+        return permissionDeniedView(request)
+        
 
-    context = {"user": user, "form": form}
+    context = {"form": form}
     return render(request, "base/update-user.html", context)

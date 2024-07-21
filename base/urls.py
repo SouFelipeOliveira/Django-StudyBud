@@ -16,3 +16,9 @@ urlpatterns = [
     path('delete-message/<str:pk>/', views.deleteMessage, name="delete-message"),
     path('update-user/<str:pk>/', views.updateUser, name="update-user")
 ]
+
+erros = [
+    path("403/", views.permissionDeniedView, name="permission-denied"),
+]
+
+urlpatterns + erros
