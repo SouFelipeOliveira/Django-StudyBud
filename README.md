@@ -14,13 +14,24 @@ Project developed in the django [course](https://www.youtube.com/watch?v=PtQiikn
    ```
    python -m venv env
    ```
-4. **Install dependencias**
+3. **activate the virtual environment**:
+
+   Linux:
+      ```
+      source env/bin/activate
+      ```
+
+   windows:
+      ```
+      venv\Scripts\activate
+      ```
+5. **Install dependencias**:
 
    ```
    pip install -r requirements.txt
    ```
 
-5. **Start the server**:
+6. **Start the server**:
    
    ```
    python manage.py runserver
