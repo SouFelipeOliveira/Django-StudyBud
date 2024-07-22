@@ -219,7 +219,7 @@ def updateUser(request, pk):
             else:
                 messages.error(request, "The form is invalid")
 
-    elif request.user != user:
+    if request.user != user:
         return permissionDeniedView(request)
         
     context = {"form": form}
