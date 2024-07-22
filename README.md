@@ -9,12 +9,16 @@ Project developed in the django [course](https://www.youtube.com/watch?v=PtQiikn
    ```
    git clone https://github.com/SouFelipeOliveira/Django-StudyBud.git
    ```
-2. **Create a virtual environment**:
+2. **Go to folder**:
+   ```
+   cd Django-StudyBud
+   ```
+3. **Create a virtual environment**:
    
    ```
    python -m venv env
    ```
-3. **activate the virtual environment**:
+4. **activate the virtual environment**:
 
    Linux:
       ```
