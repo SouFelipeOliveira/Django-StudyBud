@@ -18,7 +18,7 @@ Project developed in the django [course](https://www.youtube.com/watch?v=PtQiikn
    ```
    python -m venv env
    ```
-4. **activate the virtual environment**:
+4. **Activate the virtual environment**:
 
    Linux:
       ```
