@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Room, Topic, Message, User
 from .forms import RoomForm, UserForm, UserRegisterForm
 from django.core.exceptions import PermissionDenied
-
 # Create your views here.T
 
 
@@ -22,7 +21,7 @@ def loginPage(request):
 
     if request.method == "POST":
         email = request.POST.get("email").lower()
-        password = request.POST.get("password").lower()
+        password = request.POST.get("password")
 
         try:
             user = User.objects.get(email=email)
