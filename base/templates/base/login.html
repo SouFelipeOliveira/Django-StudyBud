@@ -14,7 +14,7 @@
 
             <form class="form" action="" method="POST">
               {% csrf_token %}
-              <div class="form__group form__group">
+              <div class="form__group">
                 <label for="room_name">Email</label>
                 <input id="email" name="email" type="text" placeholder="Enter with your email" />
               </div>
@@ -50,6 +50,7 @@
             </form>
 
             <div class="auth__action">
+            <a href="{% url 'password_reset' %}">Forgot password</a>
               <p>Haven't signed up yet?</p>
               <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
             </div>
