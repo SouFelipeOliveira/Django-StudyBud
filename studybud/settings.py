@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'base',
 
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 AUTH_USER_MODEL = 'base.User'
