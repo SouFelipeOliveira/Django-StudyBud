@@ -9,7 +9,7 @@ Project developed in the django [course](https://www.youtube.com/watch?v=PtQiikn
    ```
    git clone https://github.com/SouFelipeOliveira/Django-StudyBud.git
    ```
-2. **Go to folder**:
+2. **Go to the folder**:
    ```
    cd Django-StudyBud
    ```
